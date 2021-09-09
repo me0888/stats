@@ -1,12 +1,14 @@
 package stats
 
-import "github.com/me0888/bank/pkg/types"
+import "github.com/me0888/bank/v2/pkg/types"
 
 func Avg(payments []types.Payment) types.Money {
 	var sum types.Money
 
 	for _, v := range payments {
-		sum += v.Amount
+		if v.Status != types.StatusFail {
+			sum += v.Amount
+		}
 	}
 
 	return sum / types.Money(len(payments))
@@ -17,7 +19,9 @@ func TotalInCategory(payments []types.Payment, category types.Category) types.Mo
 
 	for _, v := range payments {
 		if category == v.Category {
-			sum += v.Amount
+			if v.Status != types.StatusFail {
+				sum += v.Amount
+			}
 		}
 	}
 
